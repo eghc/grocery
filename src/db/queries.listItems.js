@@ -46,9 +46,9 @@ module.exports = {
 
   },
   getAll(callback){
-    return listItems.all()
+    return listItems.findAll()
     .then((items) => {
-      console.log(items);
+      //console.log(items);
       callback(null, items);
     })
     .catch((err) => {

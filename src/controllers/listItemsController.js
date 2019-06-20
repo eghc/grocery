@@ -9,6 +9,20 @@ module.exports = {
 
     if(authorized){
       let request = req.body;
+      //console.log(req.body);
+      request.cost = request.cost ? parseFloat(request.cost) : null;
+      itemsQueries.create(request, (err, item) =>{
+        if(err){
+          res.sendStatus(400);
+        } else {
+          //console.log(items);
+          // res.writeHead(200);
+          // res.write(items);
+          // res.end();
+          res.send(item);
+        }
+
+      });
 
     }else{
       res.sendStatus(400);
