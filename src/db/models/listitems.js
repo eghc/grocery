@@ -34,10 +34,10 @@ module.exports = (sequelize, DataTypes) => {
 
   listItems.associate = function(models) {
     // associations can be defined here
-     //  listItems.belongsTo(models.List, {
-     //   foreignKey: "topicId",
-     //   onDelete: "CASCADE",
-     // });
+      listItems.belongsTo(models.User, {
+       foreignKey: "userId",
+       onDelete: "CASCADE",
+     });
   };
   return listItems;
 };

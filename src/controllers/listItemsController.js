@@ -1,4 +1,5 @@
 const itemsQueries = require("../db/queries.listItems.js");
+const userQueries = require("../db/queries.users.js");
 //const passport = require("passport");
 const Authorizer = require("../policies/application");
 
@@ -89,19 +90,41 @@ module.exports = {
     if(authorized){
       //console.log("2");
       let request = req.body;
+      let newItems = [];
       itemsQueries.getAll((err,items) => {
-        //console.log("3");
         if(err){
           res.sendStatus(400);
         } else {
-          //console.log(items);
-          // res.writeHead(200);
-          // res.write(items);
-          // res.end();
-          res.send(items);
+          items.map(item => {
+            //count += 1;
+            if(item.userId === null){
+              //console.log("null name");
+              item.dataValues.userName = null;
+              newItems.push(item);
+            }else{
+
+              userQueries.getUser(item.userId, (err,user) => {
+                if(err){
+                  item.dataValues.userName = null;
+                  newItems.push(item);
+                }else{
+                  item.dataValues.userName = user.firstname.concat(" ",user.lastname);
+                  newItems.push(item);
+                }
+
+                //break out and send request
+                if(newItems.length === items.length){
+                  res.send(newItems);
+                }
+
+              });
+            }
+
+
+          });
         }
 
-      })
+      });
 
     }else{
       res.sendStatus(400);
