@@ -25,6 +25,7 @@ module.exports = {
       });
 
     }else{
+      console.log("issue with adding");
       res.sendStatus(400);
     }
 
@@ -36,7 +37,23 @@ module.exports = {
 
     if(authorized){
       //if purhcased is true, get user and date if authorized
-      let request = req.body;
+      //let request = ;
+      let newReq = {
+        id: req.body["id"],
+        purchased: req.body["purchased"],
+        purchaseDate: req.body["purchased"]? new Date() : null,
+        userId: req.body["purchased"]? req.user.id: null
+      }
+      //console.log(newReq);
+      itemsQueries.update(newReq, (err, item) => {
+        //console.log(item);
+        if(err){
+          res.sendStatus(400);
+        }else{
+          res.send(item);
+        }
+
+      });
     }else{
       res.sendStatus(400);
     }
@@ -45,11 +62,19 @@ module.exports = {
 
   delete(req, res, next){
 
-    const authorized = new Authorizer(req.user).delete();
+    const authorized = new Authorizer(req.user).destroy();
 
     if(authorized){
-      let request = req.body;
-
+      //let request = req.body;
+      //console.log("delete!");
+      itemsQueries.delete(req.params.id, (err, item)=>{
+        //console.log(err);
+        if(err){
+          res.sendStatus(400);
+        }else{
+          res.send(item);
+        }
+      });
 
     }else{
       res.sendStatus(400);

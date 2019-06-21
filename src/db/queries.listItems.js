@@ -13,8 +13,8 @@ module.exports = {
     })
   },
 
-  update(newItem, itemId, callback){
-    return listItems.findById(itemId)
+  update(newItem, callback){
+    return listItems.findById(newItem.id)
      .then((item) => {
        item.update(newItem, {
          fields: Object.keys(newItem)
