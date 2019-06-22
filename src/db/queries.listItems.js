@@ -47,7 +47,11 @@ module.exports = {
 
   },
   getAll(callback){
-    return listItems.findAll()
+    return listItems.findAll({
+      order: [
+           ['id', 'ASC']
+       ]
+    })
     .then((items) => {
       //console.log(items);
       callback(null, items);

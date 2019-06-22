@@ -1,6 +1,6 @@
 const request = require("request");
 const server = require("../../src/server");
-const base = "http://localhost:8080/";
+const base = "http://localhost:8080";
 const User = require("../../src/db/models").User;
 const sequelize = require("../../src/db/models/index").sequelize;
 
@@ -8,9 +8,11 @@ describe("routes : users", () => {
 
   beforeEach((done) => {
 
-    sequelize.sync({force: true})
+    User.sync({
+      force:true
+    })
     .then(() => {
-      done();
+      done(null);
     })
     .catch((err) => {
       console.log(err);
@@ -18,6 +20,7 @@ describe("routes : users", () => {
     });
 
   });
+
   describe("POST /signUp", () => {
 
 // #1
@@ -35,8 +38,8 @@ describe("routes : users", () => {
 
     request.post(options,
       (err, res, body) => {
+        //console.log(body);
 
-// #2
         User.findOne({where: {email: "user@example.com"}})
         .then((user) => {
           expect(user).not.toBeNull();
@@ -76,6 +79,7 @@ describe("routes : users", () => {
       );
     });
   });
+
 
 
 });

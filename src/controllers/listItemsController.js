@@ -6,11 +6,12 @@ const Authorizer = require("../policies/application");
 module.exports = {
 
   add(req, res, next){
+    //console.log(req);
     const authorized = new Authorizer(req.user).create();
 
     if(authorized){
       let request = req.body;
-      //console.log(req.body);
+      //
       request.cost = request.cost ? parseFloat(request.cost) : null;
       itemsQueries.create(request, (err, item) =>{
         if(err){
