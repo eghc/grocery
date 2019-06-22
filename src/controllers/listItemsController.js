@@ -51,7 +51,21 @@ module.exports = {
         if(err){
           res.sendStatus(400);
         }else{
-          res.send(item);
+          //get user name
+          if(newReq.purchased){
+            userQueries.getUser(req.user.id, (err,user) => {
+              if(err){
+                res.sendStatus(400);
+              }else{
+                item.dataValues.userName = user.firstname.concat(" ",user.lastname);
+                //console.log(item);
+                res.send(item);
+              }
+            });
+          }else{
+            res.send(item);
+          }
+
         }
 
       });
