@@ -21,6 +21,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.BOOLEAN,
       allowNull: true
     },
+    deleted:{
+      type: DataTypes.BOOLEAN,
+      allowNull: true
+    }
     // listId: {
     //   type: DataTypes.INTEGER,
     //   onDelete: "CASCADE",

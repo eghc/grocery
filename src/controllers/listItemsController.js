@@ -2,6 +2,10 @@ const itemsQueries = require("../db/queries.listItems.js");
 const userQueries = require("../db/queries.users.js");
 //const passport = require("passport");
 const Authorizer = require("../policies/application");
+// const listener = require("../db/listener.js");
+// listener.connect();
+
+
 
 module.exports = {
 
@@ -98,24 +102,91 @@ module.exports = {
 
   },
 
+  getNew(req, res, next){
+    const authorized = new Authorizer(req.user).create();
+    if(authorized){
+      //get date minus 30 seconds
+      let timestamp =  new Date(Date.now() - 30005);
+
+      //get updates from other users
+      let newItems = [];
+      itemsQueries.findNew(req.user.id,timestamp, (err, items) =>{
+        if(err){
+          res.sendStatus(400);
+        } else {
+          //console.log(items);
+          if(items.length === 0){
+            res.send(null);
+          }
+          //get user names and send data
+            items.map(item => {
+              //count += 1;
+              if(item.userId === null){
+                //console.log("null name");
+                item.dataValues.userName = null;
+                newItems.push(item);
+
+                //break out and send request
+                if(newItems.length === items.length){
+                  res.send(newItems);
+                }
+              }else{
+
+                userQueries.getUser(item.userId, (err,user) => {
+                  if(err){
+                    item.dataValues.userName = null;
+                    newItems.push(item);
+                  }else{
+                    item.dataValues.userName = user.firstname.concat(" ",user.lastname);
+                    newItems.push(item);
+                  }
+
+                  //break out and send request
+                  if(newItems.length === items.length){
+                    res.send(newItems);
+                  }
+
+                });
+              }
+            });
+
+        }
+      });
+
+
+    }else{
+      res.sendStatus(400);
+    }
+  },
+
   getAll(req, res, next){
     //console.log("0");
     const authorized = new Authorizer(req.user).create();
     //console.log("1");
     if(authorized){
       //console.log("2");
+
       let request = req.body;
       let newItems = [];
       itemsQueries.getAll((err,items) => {
         if(err){
           res.sendStatus(400);
         } else {
+          if(items.length === 0){
+            res.send(null);
+          }
+          //console.log(items);
           items.map(item => {
             //count += 1;
             if(item.userId === null){
               //console.log("null name");
               item.dataValues.userName = null;
               newItems.push(item);
+
+              //break out and send request
+              if(newItems.length === items.length){
+                res.send(newItems);
+              }
             }else{
 
               userQueries.getUser(item.userId, (err,user) => {
@@ -134,8 +205,6 @@ module.exports = {
 
               });
             }
-
-
           });
         }
 

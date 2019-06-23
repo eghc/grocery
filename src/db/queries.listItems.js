@@ -1,4 +1,6 @@
 const listItems = require("./models").listItems;
+const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 //const User = require("./models").User;
 
 module.exports = {
@@ -34,13 +36,17 @@ module.exports = {
 
   },
   delete(itemId, callback){
-
     return listItems.findById(itemId)
      .then((item) => {
-      item.destroy()
-      .then((res) => {
+       //set to true
+      item.update({deleted: true})
+      .then(() => {
         callback(null, item);
+      })
+      .catch((err) => {
+        callback(err);
       });
+
     }).catch((err) => {
       callback(err);
     });
@@ -50,7 +56,12 @@ module.exports = {
     return listItems.findAll({
       order: [
            ['id', 'ASC']
-       ]
+       ],
+       where:{
+         deleted: {
+           [Op.not]: true
+         }
+       }
     })
     .then((items) => {
       //console.log(items);
@@ -60,6 +71,22 @@ module.exports = {
       callback(err);
     })
 
+  },
+  findNew(userId,timestamp, callback){
+    return listItems.findAll({
+      where:{
+        updatedAt:{
+            [Op.gte]: timestamp
+        }
+      }
+    })
+    .then((items) => {
+      //console.log(items);
+      callback(null, items);
+    })
+    .catch((err) => {
+      callback(err);
+    })
   }
 
 }
