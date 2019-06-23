@@ -26,10 +26,7 @@ module.exports = {
 
       });
 
-    }else{
-      console.log("issue with adding");
-      res.sendStatus(400);
-    }
+
 
   },
 
