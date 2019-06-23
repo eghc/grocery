@@ -9,17 +9,13 @@ module.exports = {
     userQueries.createUser(newUser, (err, user) => {
        if(err){
          req.flash("error", err);
-         //res.redirect("/");
          res.sendStatus(400);
-         //res.send('Incorret params');
        } else {
 
 // #3
          passport.authenticate("local")(req, res, () => {
            req.flash("notice", "You've successfully signed in!");
-           //res.redirect("/");
            res.sendStatus(200);
-           //res.send('Correct params');
          })
        }
      });
