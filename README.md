@@ -4,7 +4,7 @@ The reason for the unused files from the link above is that I tried to implement
 
 One of the biggest challenges I faced when starting this project was getting the front end to communicate with the backend in production. First, many of the tutorials online for pushing a React/Node app to Heroku were rebuilding the front end everytime when pushing to production. It caused many errors and it took me even longer to find a tutorial that didn't attempt to do this. Second, I couldn't figured out how to get Node's request module to work as expected for a long time so I had to use axios to handle requests. After talking to my mentor, I realized this was a better method anyways as axios is used in many apps. Third, I haven't used React in about 6 months; there were some gotchas that I forgot about that I had to re-learn.
 
-While there are many things I would change about this project, there were a few things I am proud of. I like how simple the interface is and how easy it is to login, sign up, add an item, remove an item, etc. I also did a decent job of organizing my frontend and backend code so that it is somewhat easy to follow and read. 
+While there are many things I would change about this project, there were a few things I am proud of. I like how simple the interface is and how easy it is to login, sign up, add an item, remove an item, etc. I also did a decent job of organizing my frontend and backend code so that it is somewhat easy to follow and read.
 
 If I were to continue to work on this project, I would:
 - Improve the "real time" feature. i.e. Get the triggers & listeners to work
